@@ -1,0 +1,80 @@
+                                CSCI-570 FINAL PROJECT
+
+Objective:
+    The Objective of this project is implement the Sequence Alignment problem as described in Kleinberg textbook. The Sequence Alignment problem can be implemented using Dynamic Programming. To improve the space efficiency, the Divide and Conquer method aims to use the space efficiently. We have implemented both Basic version and Memory Efficient version
+
+Requirements:
+    - The implementation is done in Python3
+    - We have used psutil package to calculate the memory used. Hence the execution of this algorithm requires psutil package.
+        - The installation can be done with pip install psutil.
+
+File Description
+    1) 8223382738_4556118994_basic.sh
+        This file is used to execute the 8223382738_4556118994_basic.py file. The input.txt is sent as a command line argument to 8223382738_4556118994_basic.py.
+    2) 8223382738_4556118994_efficient.sh
+        This file is used to execute the 8223382738_4556118994_efficient.py file. The input.txt is sent as a command line argument to 8223382738_4556118994_efficient.py.
+    3) 8223382738_4556118994_basic.py
+        This python file implements the solution to the Dynamic Programming version (basic version) of Sequence Alignment problem. The file takes input.txt as input and writes the alignment, cost, time taken and memory used.
+    4) 8223382738_4556118994_efficient.py
+        This python file implements the solution to the Memory Efficient version (using Divide and Conquer) of Sequence Alignment problem. The file takes input.txt as input and writes the alignment, cost, time taken and memory used.
+    5) CPUPlot.png 
+        This plots the CPU time taken by the program across different problem sizes. The problem sizes here is taken as (m+n) where 'm' is the length of the first string  and 'n' is the length of the second generated string. The CPU time is plotted for both Basic and memory efficient version. 
+    6) MemoryPlot.png
+        This plots the Memory taken by the program across different problem sizes. The problem sizes here is taken as (m+n) where 'm' is the length of the first string  and 'n' is the length of the second generated string. The Memory usage is plotted for both Basic and memory efficient version. 
+
+Implementation details: 
+
+1) 8223382738_4556118994_basic.py
+    - This file implements the Dynamic Programming version of the Sequence Alignment algorithm
+    - Initially the base string and the indices are taken from the input.txt
+    - The string is generated in generate_string() function. This function takes the file contents as the input and returns the generated string X and Y.
+    - The alignment() function aligns the input strings (string X of size m and string Y is of size n). 
+    - Initially, the function creates an array of size (m+1, n+1). The zeroth row is filled by computing j*delta, where delta=30 and j varies from 1 to n+1
+    - The zeroth column is filled by computing i*delta, where delta=30 and i varies from 1 to m+1
+    - The array calculates the optimal alignment using the recurrence formula given as follows
+        A[i][j]=min(A[i-1][j-1]*alpha[x[i]][y[j]], A[i-1][j]*delta, A[i][j-1]*delta)
+    - The fnal cost can be got from A[m][n]
+    - The path will be traversed from A[m][n] to A[0][0]. The path is generated as follows  
+        -- If A[i][j]==A[i-1][j-1]*alpha[X[i]][Y[j]], then there is a mismatch, hence X[i], Y[j] will be matched.
+        -- If A[i][j]==A[i-1][j]*delta, then there is a gap introduced in the second string. Hence X[i] and '_' will be matched.
+        -- If A[i][j]==A[i][j-1]*delta, then there is a gap introduced in the first string. Hence '_' and Y[j] will be matched.
+
+2) 8223382738_4556118994_efficient.py
+    - This file implements the Space efficient version of the Sequence Alignment algorithm. Divide and Conquer mechanism is been used to implement Memory efficiet version.
+    - Initially the base string and the indices are taken from the input.txt
+    - The string is generated in generate_string() function. This function takes the file contents as the input and returns the generated string X and Y.
+    - The d_and_c_alignment() function aligns the input strings (string X of size m and string Y is of size n). 
+    - Initially, the function checks the length of X and Y. If it's less than or equal to 2, it will call the basic version to solve the alignment.
+    - Else, the Y is divided into two and will call the forward space efficient algorithm which will find the cost of X and Y using an array of size (m,2) and returns the optimal cost in the 2nd column
+    - Similarly the two strings are reversed and then Backward space efficient algorithm is called. This will return the cost in 1st column.
+    - Then the index in X which has minimum cost is obtained by finding the minimum in Forward[i]+Backward[i] for all i in length of X.
+    - Two recursive calls is made, one is d_and_c_alignment(X[0,xmid], Y[0, ymid]) and d_and_c_alignment(X[xmid+1,m], Y[ymid+1,n]).
+    - The string alignment obtained from two strings is concatenated and returned to main function.
+
+3) The time is calculated using time.time() in time package and the plot is given in CPUPlot.png .
+4) The memory is calculated using psutil.memory_info().rss function. As this returns the memory in bytes, the result is divided by 1024 and returns the result in kilobytes. The plot is given in MemoryPlot.png
+
+Insights and Observations:
+    1) From the CPU time plot it can be inferred that the time taken by the program increases linearly with the problem size (m+n)
+    2) It can also be inferred that the time taken by the Divide and Conquer algorithm is relatively higher than the Basic Dynamic programming version of the algorithm.
+    3) From the memory plot, it can be inferred that the memory increases as the problem size increases. Whereas the memory used by the Divide and conquer algorithm.
+    4) In the memory plot, for an input of problem size 6144, the memory occupied is 160K kilobytes whereas the Memory efficient version occupies 100K kilobytes.
+    5) Similarly, for an input of problem size 8192, the memory occupied is 200K kilobytes whereas the Memory efficient version occupies 110K kilobytes. This infers the effect of Memory efficient algorithm in the Sequence Alignment problem.
+
+
+Team members Contribution:
+    1) Krithika Karthikeyan - 8223382738.
+        -Implemented the Memory Efficient version of the Sequence Alignment algorithm.
+        -Generated 15 custom input cases ranging from problem size 2 to 8192.
+        -Plotted the graph for memory usage taken by both Basic and Memory efficient version of the algorithm.
+        -Report generated for the Divide and Conquer version of the algorithm.
+    
+    2)  Swathy Dakshinamoorthy - 4556118994.
+        -Implemented the basic Dynamic programming version of the Sequence Alignment problem
+        -Tested the custom inputs on the Basic version.
+        -Plotted the graph for CPU time taken by Basic and Memory efficient version of the algorithm. 
+        -Report generated for the Basic version of the algorithm.
+    The rest of the report is generated and checked by both the teammates.
+
+
+
